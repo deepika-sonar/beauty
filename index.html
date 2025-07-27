@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Beauty Shopping</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      color: #333;
+    }
+
+    header, nav, footer {
+      padding: 1em;
+      text-align: center;
+      background-color: #f8b6d2;
+      position: relative;
+    }
+
+    #toggleButton {
+      position: absolute;
+      top: 1em;
+      left: 1em;
+      padding: 0.4em 0.8em;
+      background: #fff;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    #searchForm {
+      margin-top: 1em;
+    }
+
+    #searchBar {
+      padding: 0.5em;
+      width: 50%;
+      max-width: 400px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    #searchForm button {
+      padding: 0.5em 1em;
+      margin-left: 0.5em;
+      border: 1px solid #ccc;
+      background: #fff;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    nav button {
+      margin: 0.5em;
+      padding: 0.5em 1em;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    main {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 1em;
+    }
+
+    .product-card {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin: 1em;
+      padding: 1em;
+      width: 200px;
+      text-align: center;
+      background-color: #fff9fc;
+    }
+
+    .product-card img {
+      width: 100%;
+      height: auto;
+    }
+
+    #cart {
+      padding: 1em;
+      background: #ffe6f0;
+      text-align: center;
+      margin: 1em;
+      border-radius: 8px;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #cart-items {
+      padding: 0;
+      margin: 0 0 1em 0;
+    }
+
+    #cart-items li {
+      list-style: none;
+      margin: 0.5em 0;
+      font-weight: bold;
+    }
+
+    #cart-items li button {
+      margin-left: 1em;
+      background: red;
+      color: #fff;
+      border: none;
+      padding: 0.2em 0.5em;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    #cart-total {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-top: 0.5em;
+    }
+
+    footer a {
+      margin: 0 0.5em;
+      text-decoration: none;
+    }
+
+    #newsletter input {
+      padding: 0.5em;
+      margin-right: 0.5em;
+    }
+
+    .dark-mode {
+      background-color: #222;
+      color: #eee;
+    }
+
+    .dark-mode header,
+    .dark-mode nav,
+    .dark-mode footer,
+    .dark-mode .product-card,
+    .dark-mode #cart {
+      background-color: #333;
+      color: #fff;
+    }
+
+    .dark-mode nav button,
+    .dark-mode #toggleButton,
+    .dark-mode #searchForm button {
+      background-color: #444;
+      color: #fff;
+      border-color: #666;
+    }
+
+    @media (max-width: 768px) {
+      #searchBar {
+        width: 90%;
+      }
+
+      #searchForm button {
+        margin-left: 0.3em;
+      }
+
+      .product-card {
+        width: 90%;
+        max-width: 300px;
+      }
+
+      footer form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      footer input,
+      footer button {
+        width: 90%;
+        margin: 0.5em 0;
+      }
+
+      nav button {
+        flex: 1 1 40%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button id="toggleButton" onclick="toggleDarkMode()">🌙</button>
+    <h1>Beauty Shopping</h1>
+    <form id="searchForm" onsubmit="event.preventDefault(); doSearch();">
+      <input type="text" id="searchBar" placeholder="Search products...">
+      <button type="submit">Search</button>
+    </form>
+  </header>
+
+  <nav>
+    <button onclick="filterProducts('all')">All</button>
+    <button onclick="filterProducts('skincare')">Skincare</button>
+    <button onclick="filterProducts('makeup')">Makeup</button>
+    <button onclick="filterProducts('haircare')">Haircare</button>
+  </nav>
+
+  <main id="product-list">
+    <!-- Skincare -->
+    <div class="product-card" data-category="skincare">
+      <img src="face cream.jpg" alt="Hydrating Face Cream">
+      <h3>Hydrating Face Cream</h3>
+      <p>Rs. 499</p>
+      <button onclick="addToCart('Hydrating Face Cream')">Add to Cart</button>
+    </div>
+    <div class="product-card" data-category="skincare">
+      <img src="cleanser.jpg" alt="Gentle Cleanser">
+      <h3>Gentle Cleanser</h3>
+      <p>Rs. 350</p>
+      <button onclick="addToCart('Gentle Cleanser')">Add to Cart</button>
+    </div>
+    <div class="product-card" data-category="skincare">
+      <img src="sunscreen.jpg" alt="Broad Spectrum Sunscreen">
+      <h3>Broad Spectrum Sunscreen</h3>
+      <p>Rs. 600</p>
+      <button onclick="addToCart('Broad Spectrum Sunscreen')">Add to Cart</button>
+    </div>
+
+    <!-- Makeup -->
+    <div class="product-card" data-category="makeup">
+      <img src="lipstick.jpg" alt="Matte Lipstick">
+      <h3>Matte Lipstick</h3>
+      <p>Rs. 299</p>
+      <button onclick="addToCart('Matte Lipstick')">Add to Cart</button>
+    </div>
+    <div class="product-card" data-category="makeup">
+      <img src="mascara.jpg" alt="Volumizing Mascara">
+      <h3>Volumizing Mascara</h3>
+      <p>Rs. 450</p>
+      <button onclick="addToCart('Volumizing Mascara')">Add to Cart</button>
+    </div>
+    <div class="product-card" data-category="makeup">
+      <img src="blush.jpg" alt="Natural Blush">
+      <h3>Natural Blush</h3>
+      <p>Rs. 399</p>
+      <button onclick="addToCart('Natural Blush')">Add to Cart</button>
+    </div>
+
+    <!-- Haircare -->
+    <div class="product-card" data-category="haircare">
+      <img src="shampoo.jpg" alt="Herbal Shampoo">
+      <h3>Herbal Shampoo</h3>
+      <p>Rs. 350</p>
+      <button onclick="addToCart('Herbal Shampoo')">Add to Cart</button>
+    </div>
+    <div class="product-card" data-category="haircare">
+      <img src="conditioner.jpg" alt="Moisturizing Conditioner">
+      <h3>Moisturizing Conditioner</h3>
+      <p>Rs. 380</p>
+      <button onclick="addToCart('Moisturizing Conditioner')">Add to Cart</button>
+    </div>
+    <div class="product-card" data-category="haircare">
+      <img src="hair oil.jpg" alt="Nourishing Hair Oil">
+      <h3>Nourishing Hair Oil</h3>
+      <p>Rs. 499</p>
+      <button onclick="addToCart('Nourishing Hair Oil')">Add to Cart</button>
+    </div>
+
+    <!-- New Products Added -->
+    <div class="product-card" data-category="skincare">
+      <img src="night-cream.jpg" alt="Revitalizing Night Cream">
+      <h3>Revitalizing Night Cream</h3>
+      <p>Rs. 799</p>
+      <button onclick="addToCart('Revitalizing Night Cream')">Add to Cart</button>
+    </div>
+    <div class="product-card" data-category="makeup">
+      <img src="eyeliner.jpg" alt="Liquid Eyeliner">
+      <h3>Liquid Eyeliner</h3>
+      <p>Rs. 350</p>
+      <button onclick="addToCart('Liquid Eyeliner')">Add to Cart</button>
+    </div>
+    <div class="product-card" data-category="haircare">
+      <img src="hair mask.jpg" alt="Deep Conditioning Hair Mask">
+      <h3>Deep Conditioning Hair Mask</h3>
+      <p>Rs. 650</p>
+      <button onclick="addToCart('Deep Conditioning Hair Mask')">Add to Cart</button>
+    </div>
+  </main>
+
+  <section id="cart">
+    <h2>Your Cart</h2>
+    <ul id="cart-items"></ul>
+    <p id="cart-total">Total: Rs. 0</p>
+    <a href="https://wa.me/917020021728" target="_blank">Order on WhatsApp</a>
+  </section>
+
+  <footer>
+    <p>Contact: Ostia Society, Pune | Follow us on 
+      <a href="#">Instagram</a>, 
+      <a href="#">Facebook</a>, 
+      <a href="#">Twitter</a>
+    </p>
+    <form id="newsletter">
+      <input type="email" placeholder="Subscribe to our newsletter" required>
+      <button type="submit">Subscribe</button>
+    </form>
+  </footer>
+
+  <script>
+    const searchBar = document.getElementById('searchBar');
+    const productCards = document.querySelectorAll('.product-card');
+    const cartItems = document.getElementById('cart-items');
+    const cartTotal = document.getElementById('cart-total');
+    const body = document.body;
+
+    // Product prices map (including new products)
+    const productPrices = {
+      "Hydrating Face Cream": 499,
+      "Gentle Cleanser": 350,
+      "Broad Spectrum Sunscreen": 600,
+      "Matte Lipstick": 299,
+      "Volumizing Mascara": 450,
+      "Natural Blush": 399,
+      "Herbal Shampoo": 350,
+      "Moisturizing Conditioner": 380,
+      "Nourishing Hair Oil": 499,
+      "Revitalizing Night Cream": 799,
+      "Liquid Eyeliner": 350,
+      "Deep Conditioning Hair Mask": 650
+    };
+
+    function filterProducts(category) {
+      productCards.forEach(card => {
+        card.style.display = (category === 'all' || card.dataset.category === category) ? 'block' : 'none';
+      });
+    }
+
+    function doSearch() {
+      const value = searchBar.value.toLowerCase();
+      productCards.forEach(card => {
+        const name = card.querySelector('h3').innerText.toLowerCase();
+        card.style.display = name.includes(value) ? 'block' : 'none';
+      });
+    }
+
+    searchBar.addEventListener('input', () => {
+      doSearch();
+    });
+
+    function addToCart(productName) {
+      const items = Array.from(cartItems.children).map(li => li.dataset.name);
+      if (!items.includes(productName)) {
+        const li = document.createElement('li');
+        li.dataset.name = productName;
+        const price = productPrices[productName] || 0;
+        li.innerHTML = `${productName} - Rs. ${price} <button onclick="removeFromCart(this)">Remove</button>`;
+        cartItems.appendChild(li);
+        updateTotal();
+      }
+    }
+
+    function removeFromCart(button) {
+      button.parentElement.remove();
+      updateTotal();
+    }
+
+    function updateTotal() {
+      let total = 0;
+      Array.from(cartItems.children).forEach(li => {
+        const name = li.dataset.name;
+        total += productPrices[name] || 0;
+      });
+      cartTotal.textContent = `Total: Rs. ${total}`;
+    }
+
+    function toggleDarkMode() {
+      body.classList.toggle('dark-mode');
+    }
+
+    document.getElementById('newsletter').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = this.querySelector('input[type="email"]').value;
+      alert(`Subscribed with ${email}`);
+    });
+  </script>
+</body>
+</html>
